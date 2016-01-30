@@ -91,7 +91,7 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 
 RUN npm install --save npm-latest-version
 # Add admin/admin user
-# ADD tomcat-users.xml /opt/tomcat/conf/
+ADD tomcat-users.xml /opt/tomcat/conf/
 
 # Firefly
 RUN git clone https://github.com/lsst/firefly.git /tmp/firefly
