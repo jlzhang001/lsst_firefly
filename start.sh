@@ -15,7 +15,6 @@ if docker info; then
         -v $DIR/frontend:/www/static \
         -v $DIR/backend:/www/algorithm \
         victorren/firefly_lsst:latest &
-    docker exec firefly ./startup.sh
     PORT=ifconfig | egrep "^[a-z]|inet " | sed -e "s/ [ ]*Link.*/@/" -e "s/.*inet addr://" -e "s/ .*/#/" | tr -d '\012' | tr '@' ' ' | tr '#' '\012' | grep -e eth1 | awk '{ print $2 }'
     echo visit the web with the following address $PORT:$1/static/index.html
 

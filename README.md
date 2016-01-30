@@ -15,7 +15,7 @@ Installation
 Currently the following instruction assumes linux system
 
 1. Follow the instruction on [docker][4] and **Get started with Docker** to download, and open the machine
-2. clone this repository and go into it `git clone lsst-camera-visualization/lsst_firefly.git <your repository> && cd <your repository>`
+2. clone this repository and go into it `git clone --recursive https://github.com/lsst-camera-visualization/lsst_firefly.git <your repository> && cd <your repository>`
 3. start the docker virtual machine (for linux, it is `service docker start`, for other system, look at the official documentation)
 4. run `./install.sh`
 
