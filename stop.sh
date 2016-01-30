@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if docker info; then
     docker exec firefly ./shutdown.sh &
