@@ -68,7 +68,6 @@ apt-get install -y nodejs
 
 RUN npm install --save npm-latest-version
 # Add admin/admin user
-ADD tomcat-users.xml /opt/tomcat/conf/
 
 # Firefly
 RUN git clone https://github.com/lsst/firefly.git /tmp/firefly && \
@@ -91,7 +90,7 @@ VOLUME "/opt/tomcat/webapps"
 WORKDIR /opt/tomcat/bin
 
 RUN mkdir -p /etc/my_init.d && mkdir /www
-ADD run.sh /etc/my_init.d/run.sh
+ADD run.sh /etc/my_init.d/run1.sh
 ADD server.xml /opt/tomcat/conf/server.xml
 
 VOLUME ["/www/static", "/www/algorithm"]
