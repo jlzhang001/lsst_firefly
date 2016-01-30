@@ -119,12 +119,11 @@ EXPOSE 8009
 VOLUME "/opt/tomcat/webapps"
 WORKDIR /opt/tomcat/bin
 
-RUN mkdir -p /etc/my_init.d
+RUN mkdir -p /etc/my_init.d && mkdir /www
 ADD test.sh /etc/my_init.d/test.sh
 ADD server.xml /opt/tomcat/conf/server.xml
 
-# ENV CATALINA_HOME /opt/tomcat
-# ENV PATH $PATH:$CATALINA_HOME/
+VOLUME ["/www/static", "/www/algorithm"]
 
 # Launch Tomcat
 # CMD ["/bin/bash" "startup.sh"]
