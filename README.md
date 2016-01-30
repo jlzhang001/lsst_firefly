@@ -27,12 +27,16 @@ To run the program, `cd <your directory>`, and run `./start.sh <port number>`, a
 
 To stop the program, run `./stop.sh &` and also stop the docker virtual machine.
 
+Issues
+------
+
+Use github issues. Or email dyue2@illinois.edu
+
 [1]: https://github.com/lsst-camera-visualization/frontend
 [2]: https://github.com/lsst-camera-visualization/backend
 [3]: https://github.com/lsst/firefly
 [4]: https://www.docker.com/
 [7]: https://hub.docker.com/r/victorren/firefly_lsst/
-[8]: 
 
 
 

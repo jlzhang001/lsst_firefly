@@ -68,7 +68,7 @@ apt-get install -y nodejs
 
 RUN npm install --save npm-latest-version
 # Add admin/admin user
-# ADD tomcat-users.xml /opt/tomcat/conf/
+ADD tomcat-users.xml /opt/tomcat/conf/
 
 # Firefly
 RUN git clone https://github.com/lsst/firefly.git /tmp/firefly && \
