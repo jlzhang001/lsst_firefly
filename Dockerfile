@@ -120,7 +120,7 @@ VOLUME "/opt/tomcat/webapps"
 WORKDIR /opt/tomcat/bin
 
 RUN mkdir -p /etc/my_init.d && mkdir /www
-ADD test.sh /etc/my_init.d/test.sh
+ADD run.sh /etc/my_init.d/run.sh
 ADD server.xml /opt/tomcat/conf/server.xml
 
 VOLUME ["/www/static", "/www/algorithm"]
