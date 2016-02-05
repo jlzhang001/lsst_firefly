@@ -93,6 +93,11 @@ RUN mkdir -p /etc/my_init.d && mkdir /www
 ADD run.sh /etc/my_init.d/run1.sh
 ADD server.xml /opt/tomcat/conf/server.xml
 
+WORKDIR /opt/tomcat/webapps
+RUN jar -xvf fftools.war
+RUN sed -i '$ d' fftools/WEB-INF/config/app.pro &&
+    \"/usr/bin/python /www/algorithm/dispatcher.py" >> fftools/WEB-INF/config/app.prop
+
 VOLUME ["/www/static", "/www/algorithm"]
 
 # Launch Tomcat
