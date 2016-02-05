@@ -7,7 +7,7 @@ SCRIPT=$(readlink -f "$0")
 DIR=$(dirname "$SCRIPT")
 echo $DIR
 
-IMAGE=victorren/ff_server
+IMAGE=victorren/ff_server:latest
 
 if docker info; then
     docker pull $IMAGE
