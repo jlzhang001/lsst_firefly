@@ -26,7 +26,7 @@ rm -rf /var/cache/oracle-jdk8-installer
 # Define commonly used JAVA_HOME variable
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME /usr/lib/jvm/java-8-oracle/jre
-ENV TOMCAT_VERSION 8.0.30
+ENV TOMCAT_VERSION 8.0.32
 
 # Get Tomcat
 RUN wget --no-cookies http://apache.rediris.es/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tgz && \
@@ -37,14 +37,14 @@ rm -rf /opt/tomcat/webapps/examples && \
 rm -rf /opt/tomcat/webapps/docs && \
 rm -rf /opt/tomcat/webapps/ROOT
 
-# Get python.
-RUN apt-get update && apt-get install -y python python-numpy
 
 # Get gradle
-RUN add-apt-repository -y ppa:cwchien/gradle && \
-apt-get update && \
+RUN add-apt-repository -y ppa:cwchien/gradle
+RUN apt-get update && \
 apt-get install -y gradle
 
+# Get python.
+RUN apt-get update && apt-get install -y python python-numpy
 
 # Install Node.js
 # gpg keys listed at https://github.com/nodejs/node
@@ -62,8 +62,8 @@ apt-get install -y gradle
 #   npm install -g npm && \
 #   printf '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc
 
-RUN curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash - && \
-apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+RUN apt-get install -y nodejs
 
 
 RUN npm install --save npm-latest-version
@@ -75,6 +75,26 @@ cd /tmp/firefly && gradle :firefly:jar && gradle :fftools:war
 
 RUN apt-get install -y python-astropy
 
+RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
+    libglib2.0-0 libxext6 libsm6 libxrender1 \
+    git mercurial subversion
+RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda2-2.5.0-Linux-x86_64.sh && \
+    /bin/bash /Anaconda2-2.5.0-Linux-x86_64.sh -b -p /opt/conda && \
+    rm /Anaconda2-2.5.0-Linux-x86_64.sh
+
+RUN apt-get install -y curl grep sed dpkg && \
+    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    apt-get clean
+
+ENV PATH /opt/conda/bin:$PATH
+
+# http://bugs.python.org/issue19846
+# > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
+ENV LANG C.UTF-8
 
 ENV CATALINA_HOME /opt/tomcat
 ENV PATH $PATH:$CATALINA_HOME/bin
@@ -94,9 +114,10 @@ ADD run.sh /etc/my_init.d/run1.sh
 ADD server.xml /opt/tomcat/conf/server.xml
 
 WORKDIR /opt/tomcat/webapps
-RUN jar -xvf fftools.war
-RUN sed -i '$ d' fftools/WEB-INF/config/app.pro &&
-    \"/usr/bin/python /www/algorithm/dispatcher.py" >> fftools/WEB-INF/config/app.prop
+#RUN mkdir fftools && cd fftools && jar -xvf ../fftools.war
+
+#RUN sed '$d' fftools/WEB-INF/config/app.prop
+#RUN "python.exe=/usr/bin/python /www/algorithm/dispatcher.py" >> fftools/WEB-INF/config/app.prop
 
 VOLUME ["/www/static", "/www/algorithm"]
 
