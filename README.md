@@ -27,7 +27,7 @@ To run the program, `cd <your directory>`(the repository cloned from GIT), and r
 
 To stop the program, run `./stop.sh &` and also stop the docker virtual machine.
 
-To login in to the docker container and debugging, run `docker exec -it firefly bash`.
+To login in to the docker container and debug, run `docker exec -it firefly bash`.
 
 
 
