@@ -25,12 +25,21 @@ Start and Stop
 
 To run the program, `cd <your directory>`(the repository cloned from GIT), and run `./start.sh <port number>`, and go to `http://localhost:<port number>` to see the result
 
-To stop the program, run `./stop.sh &` and also stop the docker virtual machine.
+To stop the program, run `./stop.sh &` and then also stop the docker virtual machine.
+
+To login in to the docker container and debug, run `docker exec -it firefly bash`.
+
+
+
 
 Issues
 ------
 
 Use github issues. Or email dyue2@illinois.edu
+
+### currently known issue
+
++ when kill the docker instance, there will be a defunct java process. The process is defunt at this moment. The zombie process will presist. Current work around is restart the docker server (or to retart the machine).
 
 [1]: https://github.com/lsst-camera-visualization/frontend
 [2]: https://github.com/lsst-camera-visualization/backend

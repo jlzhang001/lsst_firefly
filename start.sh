@@ -7,9 +7,9 @@ SCRIPT=$(readlink -f "$0")
 DIR=$(dirname "$SCRIPT")
 echo $DIR
 
-#IMAGE=victorren/ff_server:latest
+IMAGE=victorren/ff_server:latest
 
-IMAGE=ff
+#IMAGE=ff
 if docker info; then
     # docker pull $IMAGE
     docker rm firefly || echo "first time to run"
