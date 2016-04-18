@@ -19,9 +19,8 @@ if docker info; then
         -v $DIR/backend:/www/algorithm \
         $IMAGE &
     PORT=ifconfig | egrep "^[a-z]|inet " | sed -e "s/ [ ]*Link.*/@/" -e "s/.*inet addr://" -e "s/ .*/#/" | tr -d '\012' | tr '@' ' ' | tr '#' '\012' | grep -e eth1 | awk '{ print $2 }'
-    echo visit the web with the following address host"$PORT":$1/static/index.html
+    echo visit the web with the following address localhost"$PORT":$1/static/index.html
 
 else
     echo "Please ssh into docker-machine"
 fi
-
