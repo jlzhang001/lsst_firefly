@@ -15,6 +15,7 @@ if docker info; then
     docker rm firefly || echo "first time to run"
     docker run -p $1-$(($1+10)):8080-8090 \
         --name firefly\
+        --net="host" \
         -v $DIR/frontend:/www/static \
         -v $DIR/backend:/www/algorithm \
         $IMAGE &
