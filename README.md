@@ -6,13 +6,13 @@ This repository is for the environment settings of LSST visualization server fra
 Basic coding structure
 ----------------------
 
-The whole application is based on the web technology. The application is built on top of [lsst/firefly][3]. To facilitate the use of firefly, we plan to use the [docker][4] for deployment and development. It creates an clean virtual environment and glues the frontend and backend code together.
+The whole application is based on the web technology. The application is built on top of [lsst/firefly][3]. To facilitate the use of firefly, we plan to use the [Docker][4] for deployment and development. It creates an clean virtual environment and glues the front end and back end code together.
 
-The image is available on [docker hub][7] and for interest, please look at the [Dockerfile][8] that created this image.
+The image is available on [Docker hub][7] and for interest, please look at the [Dockerfile][8] that created this image.
 
 Installation using Docker
 ------------
-Currently the following instruction assumes Linux/Unix system. The shell script might not be compatible with other types of OS. Note that Docker requires Linux kernel 3.10 or higher to be able to run. Check [here][9] for dependencies.
+Currently the following instruction assumes Linux/Unix system. The shell script might not be compatible with other types of operating systems. Note that **Docker requires Linux kernel 3.10 or higher** to be able to run. Check [here][9] for dependencies.
 
 1. Follow the instruction on [Docker][4] and download Docker engine based on your OS. Detailed information on Docker is also available on the [documentation page][10].
 2. clone this repository and go into it `git clone --recursive https://github.com/lsst-camera-visualization/lsst_firefly.git <your repository> && cd <your repository>`
@@ -33,7 +33,7 @@ If you want to login into the docker container to debug interactively, run `dock
 Issues
 ------
 
-Please use github issues for any bug or improvement. 
+Please use [Github Issues][11] for any bug or improvement. 
 
 ### Currently known issue
 
@@ -47,6 +47,7 @@ Please use github issues for any bug or improvement.
 [8]: https://github.com/lsst-camera-visualization/lsst_firefly/blob/master/Dockerfile
 [9]: https://docs.docker.com/engine/installation/binaries/
 [10]: https://docs.docker.com/engine/
+[11]: https://github.com/lsst-camera-visualization/lsst_firefly/issues
 
 
 
