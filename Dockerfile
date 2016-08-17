@@ -1,4 +1,4 @@
-FROM phusion/baseimage
+FROM phusion/baseimage:latest
 
 MAINTAINER DCRW
 
@@ -8,13 +8,13 @@ CMD ["/sbin/my_init"]
 # Fix sh
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-# Install dependencies
+########## Install default dependencies ##########
 RUN apt-get update && \
 apt-get install -y software-properties-common && \
 apt-get install -y git build-essential curl wget
 
 
-# Install JDK 8
+########## Install JDK 8 ##########
 RUN \
 add-apt-repository -y ppa:webupd8team/java && \
 apt-get update && \
@@ -22,23 +22,28 @@ echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | de
 apt-get install -y oracle-java8-installer wget unzip tar && \
 rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/cache/oracle-jdk8-installer
-
-# Define commonly used JAVA_HOME variable
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME /usr/lib/jvm/java-8-oracle/jre
-ENV TOMCAT_VERSION 8.0.32
 
-# Get Tomcat
-RUN wget --no-cookies http://apache.rediris.es/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tgz && \
+
+########## Install Tomcat ##########
+ENV CATALINA_HOME /opt/tomcat
+ENV PATH $CATALINA_HOME/bin:$PATH
+RUN mkdir -p "$CATALINA_HOME"
+WORKDIR $CATALINA_HOME
+
+ENV TOMCAT_MAJOR 9
+ENV TOMCAT_VERSION 9.0.0.M9
+ENV TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
+
+# Wget Tomcat
+RUN wget --no-cookies "$TOMCAT_TGZ_URL" -O /tmp/tomcat.tgz && \
 tar xzvf /tmp/tomcat.tgz -C /opt && \
-mv /opt/apache-tomcat-${TOMCAT_VERSION} /opt/tomcat && \
-rm /tmp/tomcat.tgz && \
-rm -rf /opt/tomcat/webapps/examples && \
-rm -rf /opt/tomcat/webapps/docs && \
-rm -rf /opt/tomcat/webapps/ROOT
+mv /opt/apache-tomcat-${TOMCAT_VERSION} "$CATALINA_HOME" && \
+rm /tmp/tomcat.tgz
 
 
-# Get gradle
+########## Install Gradle ##########
 RUN add-apt-repository -y ppa:cwchien/gradle
 RUN apt-get update && \
 apt-get install -y gradle
