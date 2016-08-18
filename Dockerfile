@@ -56,16 +56,16 @@ RUN npm install --save npm-latest-version
 
 ########## Build Firefly ##########
 ENV FIREFLY_GIT https://github.com/Caltech-IPAC/firefly.git
-RUN git clone "$FIREFLY_GIT" /tmp/firefly && \
+RUN git clone "$FIREFLY_GIT" /tmp/firefly && git checkout rc && \
 cd /tmp/firefly && gradle :firefly:jar && gradle :fftools:war
 
 
 ########## Install Anaconda ##########
+ENV CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh
 RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
     git mercurial subversion
 
-ENV CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
     wget --quiet "$CONDA_URL" -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
@@ -77,19 +77,16 @@ RUN apt-get install -y curl grep sed dpkg && \
     dpkg -i tini.deb && \
     rm tini.deb && \
     apt-get clean
-
 ENV PATH /opt/conda/bin:$PATH
+# Install common packages
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
+RUN conda install jupyter astropy astroquery aplpy photutils wcsaxes numpy matplotlib reproject scipy scikit-image
 
-ENV CATALINA_HOME /opt/tomcat
-ENV PATH $PATH:$CATALINA_HOME/bin
 
+########## Copy firefly webapp to tomcat server ##########
 RUN cp /tmp/firefly/build/libs/fftools.war $CATALINA_HOME/webapps/
-
-# RUN cd /tmp && \
-# wget https://github.com/lsst/firefly/releases/download/Firefly-Standalone_2.4.1_Beta-49_master/fftools-exec.war
 
 EXPOSE 8080
 EXPOSE 8009
