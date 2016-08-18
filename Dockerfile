@@ -74,7 +74,7 @@ RUN mv apache-tomcat-${TOMCAT_VERSION} $CATALINA_HOME && \
 
 
 ########## Copy firefly webapp to tomcat server ##########
-COPY ./build_essential/fftools.war ${CATALINA_HOME}/webapps/
+COPY ./essential/fftools.war ${CATALINA_HOME}/webapps/
 
 
 ########## Expose port to host ##########
@@ -85,8 +85,8 @@ WORKDIR /opt/tomcat/bin
 
 ########## Initialize script on startup ##########
 RUN mkdir -p /etc/my_init.d && mkdir /www
-ADD ./build_essential/run.sh /etc/my_init.d/run1.sh
-ADD ./build_essential/server.xml /opt/tomcat/conf/server.xml
+ADD ./essential/run.sh /etc/my_init.d/run1.sh
+ADD ./essential/server.xml /opt/tomcat/conf/server.xml
 
 WORKDIR /opt/tomcat/webapps
 
