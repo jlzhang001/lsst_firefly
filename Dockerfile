@@ -32,7 +32,7 @@ ENV JRE_HOME /usr/lib/jvm/java-8-oracle/jre
 # RUN npm install --save npm-latest-version
 
 
-# ########## Install Anaconda ##########
+########## Install miniconda ##########
 ENV CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh
 RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
@@ -46,17 +46,6 @@ ENV PATH /opt/conda/bin:$PATH
 RUN conda install scipy numpy astropy six && \
     conda clean -i -l -t -y
 ENV LANG C.UTF-8
-
-# RUN apt-get install -y curl grep sed dpkg && \
-#     TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
-#     curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
-#     dpkg -i tini.deb && \
-#     rm tini.deb && \
-#     apt-get clean
-# # Install common packages
-# # http://bugs.python.org/issue19846
-# # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
-# RUN conda install astropy scipy numpy
 
 
 ########## Install Tomcat ##########
@@ -85,25 +74,24 @@ RUN mv apache-tomcat-${TOMCAT_VERSION} $CATALINA_HOME && \
 
 
 ########## Copy firefly webapp to tomcat server ##########
-COPY ./fftools.war ${CATALINA_HOME}/webapps/
+COPY ./build_essential/fftools.war ${CATALINA_HOME}/webapps/
 
+
+########## Expose port to host ##########
 EXPOSE 8080
 EXPOSE 8009
 VOLUME "/opt/tomcat/webapps"
 WORKDIR /opt/tomcat/bin
 
+########## Initialize script on startup ##########
 RUN mkdir -p /etc/my_init.d && mkdir /www
-ADD run.sh /etc/my_init.d/run1.sh
-ADD server.xml /opt/tomcat/conf/server.xml
+ADD ./build_essential/run.sh /etc/my_init.d/run1.sh
+ADD ./build_essential/server.xml /opt/tomcat/conf/server.xml
 
 WORKDIR /opt/tomcat/webapps
-#RUN mkdir fftools && cd fftools && jar -xvf ../fftools.war
 
-# RUN sed '$d' fftools/WEB-INF/config/app.prop
-# RUN "python.exe=/usr/bin/python /www/algorithm/dispatcher.py" >> fftools/WEB-INF/config/app.prop
-
+########## Attach code as volume ##########
 VOLUME ["/www/static", "/www/algorithm"]
 
-# Launch Tomcat
-# CMD ["/bin/bash" "startup.sh"]
-# CMD chmod +x *.sh && source startup.sh
+########## Cleanup ##########
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
