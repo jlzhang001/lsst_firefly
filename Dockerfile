@@ -8,12 +8,6 @@ CMD ["/sbin/my_init"]
 # Fix sh
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
-########## Install default dependencies ##########
-RUN apt-get update && \
-apt-get install -y software-properties-common && \
-apt-get install -y git build-essential curl wget
-
-
 ########## Install JDK 8 ##########
 RUN \
 add-apt-repository -y ppa:webupd8team/java && \
@@ -26,26 +20,19 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME /usr/lib/jvm/java-8-oracle/jre
 
 
-########## Install Gradle ##########
-RUN add-apt-repository -y ppa:cwchien/gradle
-RUN apt-get update && \
-apt-get install -y gradle-2.14.1
+# ########## Install Gradle ##########
+# RUN add-apt-repository -y ppa:cwchien/gradle
+# RUN apt-get update && \
+# apt-get install -y gradle-2.14.1
+#
+#
+# ########## Install Nodejs ##########
+# RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+# RUN apt-get install -y nodejs
+# RUN npm install --save npm-latest-version
 
 
-########## Install Nodejs ##########
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-RUN apt-get install -y nodejs
-RUN npm install --save npm-latest-version
-
-
-########## Build Firefly ##########
-ENV FIREFLY_GIT https://github.com/Caltech-IPAC/firefly.git
-RUN git clone "$FIREFLY_GIT" /tmp/firefly
-RUN cd /tmp/firefly && git checkout rc && \
-gradle :firefly:jar && gradle :fftools:war
-
-
-########## Install Anaconda ##########
+# ########## Install Anaconda ##########
 ENV CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh
 RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
@@ -73,7 +60,6 @@ RUN conda install astropy scipy numpy
 ########## Install Tomcat ##########
 ENV CATALINA_HOME /opt/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
-RUN mkdir -p "$CATALINA_HOME"
 WORKDIR /opt
 
 ENV TOMCAT_MAJOR 9
@@ -87,9 +73,17 @@ RUN mv apache-tomcat-${TOMCAT_VERSION} $CATALINA_HOME && \
     rm "$TOMCAT_TEMP"
 
 
+########## Build Firefly ##########
+# Already built once. Simple add fftools.war into tomcat directory.
+
+# ENV FIREFLY_GIT https://github.com/Caltech-IPAC/firefly.git
+# RUN git clone "$FIREFLY_GIT" /tmp/firefly
+# RUN cd /tmp/firefly && git checkout rc && \
+# gradle :firefly:jar && gradle :fftools:war
+
+
 ########## Copy firefly webapp to tomcat server ##########
-RUN ls /opt/tomcat
-RUN cp /tmp/firefly/build/libs/fftools.war ${CATALINA_HOME}/webapps/
+COPY ./fftools.war ${CATALINA_HOME}/webapps/
 
 EXPOSE 8080
 EXPOSE 8009
