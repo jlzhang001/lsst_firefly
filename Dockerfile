@@ -35,7 +35,6 @@ WORKDIR $CATALINA_HOME
 ENV TOMCAT_MAJOR 9
 ENV TOMCAT_VERSION 9.0.0.M9
 ENV TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
-
 # Wget Tomcat
 RUN wget --no-cookies "$TOMCAT_TGZ_URL" -O /tmp/tomcat.tgz && \
 tar xzvf /tmp/tomcat.tgz -C /opt && \
@@ -48,45 +47,29 @@ RUN add-apt-repository -y ppa:cwchien/gradle
 RUN apt-get update && \
 apt-get install -y gradle
 
-# Get python.
-RUN apt-get update && apt-get install -y python python-numpy
 
-# Install Node.js
-# gpg keys listed at https://github.com/nodejs/node
-# RUN \
-#   cd /tmp && \
-#   wget http://nodejs.org/dist/node-latest.tar.gz && \
-#   tar xvzf node-latest.tar.gz && \
-#   rm -f node-latest.tar.gz && \
-#   cd node-v* && \
-#   ./configure && \
-#   CXX="g++ -Wno-unused-local-typedefs" make && \
-#   CXX="g++ -Wno-unused-local-typedefs" make install && \
-#   cd /tmp && \
-#   rm -rf /tmp/node-v* && \
-#   npm install -g npm && \
-#   printf '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc
-
-RUN curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+########## Install Nodejs ##########
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 RUN apt-get install -y nodejs
-
-
 RUN npm install --save npm-latest-version
-# Add admin/admin user
 
-# Firefly
-RUN git clone https://github.com/lsst/firefly.git /tmp/firefly && \
+
+########## Build Firefly ##########
+ENV FIREFLY_GIT https://github.com/Caltech-IPAC/firefly.git
+RUN git clone "$FIREFLY_GIT" /tmp/firefly && \
 cd /tmp/firefly && gradle :firefly:jar && gradle :fftools:war
 
-RUN apt-get install -y python-astropy
 
+########## Install Anaconda ##########
 RUN apt-get update --fix-missing && apt-get install -y wget bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1 \
     git mercurial subversion
+
+ENV CONDA_URL https://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.continuum.io/archive/Anaconda2-2.5.0-Linux-x86_64.sh && \
-    /bin/bash /Anaconda2-2.5.0-Linux-x86_64.sh -b -p /opt/conda && \
-    rm /Anaconda2-2.5.0-Linux-x86_64.sh
+    wget --quiet "$CONDA_URL" -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda && \
+    rm ~/miniconda.sh
 
 RUN apt-get install -y curl grep sed dpkg && \
     TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
@@ -96,7 +79,6 @@ RUN apt-get install -y curl grep sed dpkg && \
     apt-get clean
 
 ENV PATH /opt/conda/bin:$PATH
-
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
