@@ -4,14 +4,13 @@ This repository is for the environment settings of LSST visualization server fra
 
 
 ##Basic coding structure
-----------------------
 
 The whole application is based on the web technology. The application is built on top of [lsst/firefly][3]. To facilitate the use of firefly, we plan to use the [Docker][4] for deployment and development. It creates an clean virtual environment and glues the front end and back end code together.
 
 The image is available on [Docker hub][7] and for interest, please look at the [Dockerfile][8] that created this image.
 
 ##Installation
-------------
+
 ###Using Docker
 Currently the following instruction assumes Linux/Unix system. The shell script might not be compatible with other types of operating systems. Note that **Docker requires Linux kernel 3.10 or higher** to be able to run. Check [here][9] for dependencies.
 
@@ -26,8 +25,7 @@ Alternatively, if Docker is not available or is not the best option, the procedu
 1. First build `fftools.war` based on the instruction of [Firefly][3]. Dependencies and commands are also listed on the page. After building `fftools.war`, Oracle Java 8 should exist in the `$PATH` and Tomcat will be able to find it.
 2. Deploy [Tomcat 7+][13] on local machine. You can install by using the package manager or download the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify the configuration file to specify the code directory and ports exposed.
 
-Start and Stop
-----
+## Start and Stop
 
 To run the program, `cd <your directory>`(the repository cloned from GIT), and run `./start.sh <port number>`, and go to `http://localhost:<port number>` to see the result
 
@@ -36,8 +34,7 @@ To stop the program, run `./stop.sh &` and then also stop the docker virtual mac
 If you want to login into the docker container to debug interactively, run `docker exec -it firefly bash`. This will drop the user to a bash shell inside the docker virtual machine.
 
 
-Issues
-------
+## Issues
 
 Please use [Github Issues][11] for any bug or improvement.
 
