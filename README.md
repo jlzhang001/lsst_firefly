@@ -22,15 +22,18 @@ Currently the following instruction assumes Linux/Unix system. The shell script 
 ###On local machine
 Alternatively, the procedures in the Dockerfile can be reproduced on local machine but the user has to take care of those commands. 
 
-Note that we comment out some of the steps in Dockerfile and copy existing compiled version of fftools to reduce the Docker image size. User still needs to complete those steps to build [Firefly][3] fftools and might have to resolve any unmet dependencies.
+Note that we comment out some steps in Dockerfile and copy existing compiled version of fftools to reduce the Docker image size. User still needs to complete those steps to build [Firefly][3] fftools and might have to resolve any unmet dependencies.
 
 1. First build `fftools.war` based on the instruction of [Firefly][3]. Dependencies and commands are also listed on the page. After building `fftools.war`, Oracle Java 8 should exist in the `$PATH` and Tomcat will be able to find it.
 2. Check out the lastest version of [front end][1] and [back end][2] code.
-3. Deploy [Tomcat 7+][13] on local machine either by package manager or downloading the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify `$CATALINA_HOME/conf/server.xml` to specify the code directory and ports exposed.
+3. Deploy [Tomcat 7+][13] on local machine either by package manager or downloading the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify `$CATALINA_HOME/conf/server.xml` to specify the code directory.
     - If you install Tomcat using package manager, look for the directory where Tomcat configuration file exists. For example, `/etc/tomcat7/server.xml` is the server configuration of `tomcat7` installed by `apt-get` on Ubuntu 14.04.
     - Otherwise you should be aware of where `$CATALINA_HOME` points to. For example, if you use the binary downloaded from Tomcat official website, environmental variable `$CATALINA_HOME` can be set to the directory where tomcat files being extracted and `$CATALINA_HOME/conf/server.xml` is the configuration file.
+    
+    You can also change the port 8080 to other ports (port number under 1024 usually requires root privilege).
+
 4. Copy `fftools.war` (built in step 1) to `$CATALINA_HOME/webapps`.
-4. Add the following line in the `<Host> ... </Host>` block in  `$CATALINA_HOME/conf/server.xml`:
+5. Add the following line in the `<Host> ... </Host>` block in  `$CATALINA_HOME/conf/server.xml`:
 
     ```xml
     <Context docBase="/path/to/your/frontend/code" path="/name of the app" />
@@ -40,7 +43,7 @@ Note that we comment out some of the steps in Dockerfile and copy existing compi
     <Context docBase="/home/user_name/lsst/frontend" path="/static" />
     ```
     
-4. Edit `$CATALINA_HOME/webapps/fftools/WEB-INF/config/app.prop` (assume back end code is cloned into `/home/user_name/lsst/backend/`) :
+6. Edit `$CATALINA_HOME/webapps/fftools/WEB-INF/config/app.prop` (assume back end code is cloned into `/home/user_name/lsst/backend/`) :
     ```
     python.exe= "/path/to/python /home/user_name/lsst/backend/dispatcher.py"
     ```
