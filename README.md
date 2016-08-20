@@ -11,7 +11,7 @@ The image is available on [Docker hub][7] and for interest, please look at the [
 
 ##Installation
 
-###Using Docker
+###Using Docker Engine
 Currently the following instruction assumes Linux/Unix system. The shell script might not be compatible with other types of operating systems. Note that **Docker requires Linux kernel 3.10 or higher** to be able to run. Check [here][9] for dependencies.
 
 1. Follow the instruction on [Docker][4] and download Docker engine based on your OS. Detailed information on Docker is also available on the [documentation page][10].
@@ -20,10 +20,13 @@ Currently the following instruction assumes Linux/Unix system. The shell script 
 4. run `./install.sh`
 
 ###On local machine
-Alternatively, if Docker is not available or is not the best option, the procedures in the Dockerfile can be reproduced on local machine but the user have to take care of those commands. Note that we comment out some of the steps in Dockerfile and copy existing compiled version of fftools to reduce the Docker image size. User still needs to complete those steps to build [Firefly][3] fftools and might have to resolve any unmet dependencies.
+Alternatively, if Docker is not available or is not the best option, the procedures in the Dockerfile can be reproduced on local machine but the user has to take care of those commands. Note that we comment out some of the steps in Dockerfile and copy existing compiled version of fftools to reduce the Docker image size. User still needs to complete those steps to build [Firefly][3] fftools and might have to resolve any unmet dependencies.
 
 1. First build `fftools.war` based on the instruction of [Firefly][3]. Dependencies and commands are also listed on the page. After building `fftools.war`, Oracle Java 8 should exist in the `$PATH` and Tomcat will be able to find it.
-2. Deploy [Tomcat 7+][13] on local machine. You can install by using the package manager or download the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify the configuration file to specify the code directory and ports exposed.
+2. Deploy [Tomcat 7+][13] on local machine. You can install by using the package manager or download the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify the configuration file to specify the code directory and ports exposed. The file should be `$CATALINA_BASE/conf/server.xml`
+    - If you install Tomcat using package manager, look for the directory where Tomcat configuration file exists. For example,  `/opt/tomcat/conf/server.xml` is the server configuration of `tomcat7` installed by `apt-get` on Ubuntu 14.04.
+    - If you use the binary downloaded from Tomcat official website, 
+3. ...
 
 ## Start and Stop
 
