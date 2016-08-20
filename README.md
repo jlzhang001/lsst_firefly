@@ -22,8 +22,6 @@ Currently the following instruction assumes Linux/Unix system. The shell script 
 ###On local machine
 Alternatively, the procedures in the Dockerfile can be reproduced on local machine but the user has to take care of those commands. 
 
-Note that we comment out some steps in Dockerfile and copy existing compiled version of fftools to reduce the Docker image size. User still needs to complete those steps to build [Firefly][3] fftools and might have to resolve any unmet dependencies.
-
 1. First build `fftools.war` based on the instruction of [Firefly][3]. Dependencies and commands are also listed on the page. After building `fftools.war`, Oracle Java 8 should exist in the `$PATH` and Tomcat will be able to find it.
 2. Check out the lastest version of [front end][1] and [back end][2] code.
 3. Deploy [Tomcat 7+][13] on local machine either by package manager or downloading the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify `$CATALINA_HOME/conf/server.xml` to specify the code directory.
@@ -47,8 +45,10 @@ Note that we comment out some steps in Dockerfile and copy existing compiled ver
     ```
     python.exe= "/path/to/python /home/user_name/lsst/backend/dispatcher.py"
     ```
-    - If `fftools/` directory does not exists in `$CATALINA_HOME/webapps/`, you can start the tomcat service and visit `localhost:8080/fftools` or manually unzip the war file into `fftools/`.
+    - If `fftools/` directory does not exists in `$CATALINA_HOME/webapps/`, you can start the tomcat service first and visit `localhost:8080/fftools` or manually unzip the war file into `$CATALINA_HOME/webapps/fftools/`.
     - Look at [this documentation][14] from Firefly if you want to change how firefly handles FITS files.
+    
+Now you can start the server.
 
 ## Start and Stop
 
