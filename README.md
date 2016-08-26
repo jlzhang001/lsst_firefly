@@ -52,12 +52,23 @@ Now you can start the server.
 
 ## Start and Stop
 
-To run the program, `cd <your directory>`(the repository cloned from GIT), and run `./start.sh <port number>`, and go to `http://localhost:<port number>` to see the result
+### Using Docker Engine
+To run the program/server, `cd <your directory>`(the repository cloned from GIT), and run `./start.sh <port number>`, and go to `http://localhost:<port number>` to see the result
 
-To stop the program, run `./stop.sh &` and then also stop the docker virtual machine.
+To stop the program, run `./stop.sh &` and it will also stop the docker container for this image.
 
-If you want to login into the docker container to debug interactively, run `docker exec -it firefly bash`. This will drop the user to a bash shell inside the docker virtual machine.
+If you want to login into the docker container to debug interactively, run:
+```bash
+docker exec -it firefly bash
+``` 
+This will drop the user to a bash shell inside the docker virtual machine.
 
+### On local machine
+To run the program/server, change direcotry to tomcat scripts.`cd $CATALINA_HOME/bin`. Run `./startup.sh` to start tomcat server. Make sure you have java enviroment before starting.
+
+ - If you install tomcat through package manager, it is likely that tomcat will automatically running in the backend when OS starts. (Otherwise, you can also change the startup file `/etc/init.d/tomcat`.)
+
+To stop, run `./shutdown.sh` (also in `$CATALINA_HOME/bin`). This will stop the server.
 
 ## Issues
 
