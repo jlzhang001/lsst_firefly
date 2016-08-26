@@ -64,7 +64,7 @@ docker exec -it firefly bash
 This will drop the user to a bash shell inside the docker virtual machine.
 
 ### On local machine
-To run the program/server, change direcotry to tomcat scripts.`cd $CATALINA_HOME/bin`. Run `./startup.sh` to start tomcat server. Make sure you have java enviroment before starting.
+To run the program/server, change direcotry to tomcat scripts by `cd $CATALINA_HOME/bin`. Run `./startup.sh` to start tomcat server. Make sure you have java enviroment before starting.
 
  - If you install tomcat through package manager, it is likely that tomcat will automatically running in the backend when OS starts. (Otherwise, you can also change the startup file `/etc/init.d/tomcat`.)
 
