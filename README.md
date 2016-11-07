@@ -23,7 +23,7 @@ Currently the following instruction assumes Linux/Unix system. The shell script 
 
 Now you can start the server.
 
-#### Start and Stop
+### Start and Stop
 
 To run the program/server, `cd <your directory>`(the repository cloned from GIT), and run `./start.sh <port number>`, and go to `http://localhost:<port number>` to see the result
 
@@ -66,7 +66,7 @@ Alternatively, the procedures in the Dockerfile can be reproduced on local machi
     
 Now you can start the server.
 
-#### Start and Stop
+### Start and Stop
 
 To run the program/server, change direcotry to tomcat scripts by `cd $CATALINA_HOME/bin`. Run `./startup.sh` to start tomcat server. Make sure you have java enviroment before starting.
 
