@@ -1,0 +1,25 @@
+# set this property to the search path to look for fits files
+# this path does not need to include the upload or cache directory
+visualize.fits.search.path=/Library/WebServer/Documents:/irsadata:/hydra/alerts:/hydra/workarea/fftools:@wise.filesystem_basepath@:@planck.filesystem_basepath@:@ptf.filesystem_basepath@:@lcogt.filesystem_basepath@:@lsst.filesystem_basepath@
+
+irsa.gator.hostname=irsa.ipac.caltech.edu
+wise.ibe.host=irsa.ipac.caltech.edu/ibe
+twomass.ibe.host=irsa.ipac.caltech.edu/ibe
+
+FireflyTools.Advertise=
+ignore.auth=true
+
+lsst.dataAccess.uri =
+lsst.dataAccess.db =
+
+# not used at the moment - since Aug 2015 - may come back
+#lsst.qserv.uri=@lsst.qserv.uri@
+#lsst.qserv.user=@lsst.qserv.user@
+#lsst.qserv.pass=@lsst.qserv.pass@
+#lsst.schema.uri = @lsst.schema.uri@
+#lsst.schema.user = @lsst.schema.user@
+#lsst.schema.pass = @lsst.schema.pass@
+
+visualize.fits.Security= false
+
+python.exe=/opt/conda/bin/python /www/algorithm/dispatcher.py
