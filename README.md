@@ -9,7 +9,7 @@ The whole application is based on the web technology. The application is built o
 
 The image is available on [Docker hub][7] and for interest, please look at the [Dockerfile][8] that created this image. To build your own docker image from the dockerfile, use `docker build -t <tag> .` and excute this command in the same directory of dockerfile.
 
-User can also replicate the procedures in the dockerfiles to deploy this LSST visualization framework on a local machine instead of in a virtualized docker container. Please see [installation on local machine](#on-local-machine).
+User can also replicate the procedures in the dockerfiles to deploy this LSST visualization framework on a local machine instead of in a virtualized docker container. Please see the section [installation on local machine](#on-local-machine).
 
 # Installation
 
@@ -38,7 +38,7 @@ This will drop the user to a bash shell inside the docker virtual machine.
 ## On local machine
 Alternatively, the procedures in the Dockerfile can be reproduced on local machine but the user has to take care of those commands. 
 
-1. First build `fftools.war` based on the instruction of [Firefly][3]. Dependencies and commands are also listed on the page. After building `fftools.war`, Oracle Java 8 should exist in the `$PATH` and Tomcat will be able to find it.
+1. First build `firefly.war` based on the instruction of [Firefly][3]. Dependencies and commands are also listed on the page. After building `firefly.war`, Oracle Java 8 should exist in the `$PATH` and Tomcat will be able to find it.
 2. Check out the lastest version of [front end][1] and [back end][2] code.
 3. Deploy [Tomcat 7+][13] on local machine either by package manager or downloading the binary from [Tomcat website][12]. Before starting Tomcat server, we need to modify `$CATALINA_HOME/conf/server.xml` to specify the code directory.
     - If you install Tomcat using package manager, look for the directory where Tomcat configuration file exists. For example, `/etc/tomcat7/server.xml` is the server configuration of `tomcat7` installed by `apt-get` on Ubuntu 14.04.
@@ -46,7 +46,7 @@ Alternatively, the procedures in the Dockerfile can be reproduced on local machi
     
     You can also change the port 8080 to other ports (port number under 1024 usually requires root privilege).
 
-4. Copy `fftools.war` (built in step 1) to `$CATALINA_HOME/webapps`.
+4. Copy `firefly.war` (built in step 1) to `$CATALINA_HOME/webapps`.
 5. Add the following line in the `<Host> ... </Host>` block in  `$CATALINA_HOME/conf/server.xml`:
 
     ```xml
@@ -57,13 +57,23 @@ Alternatively, the procedures in the Dockerfile can be reproduced on local machi
     <Context docBase="/home/user_name/lsst/frontend" path="/static" />
     ```
     
-6. Edit `$CATALINA_HOME/webapps/fftools/WEB-INF/config/app.prop` (assume back end code is cloned into `/home/user_name/lsst/backend/`) :
+6. In order to communicate between front end and back end (python scripts), Firefly needs to know python path and scripts. This is defined in the `app.prop` file. You can provide tomcat with a user defined `app.prop` for Firefly during runtime. 
+
+- Edit this [example file](s_build_Essential/app.prop) or `$CATALINA_HOME/webapps/fftools/WEB-INF/config/app.prop`(if it exisits):
     ```
     python.exe= "/path/to/python /home/user_name/lsst/backend/dispatcher.py"
     ```
-    - If `fftools/` directory does not exists in `$CATALINA_HOME/webapps/`, you can start the tomcat service first and visit `localhost:8080/fftools` or manually unzip the war file into `$CATALINA_HOME/webapps/fftools/`.
+    - Note: make sure path to `python` and `dispatch.py` is correct.
     - Look at [this documentation][14] from Firefly if you want to change how firefly handles FITS files.
     
+- Then copy this modified `app.prop` into another `firefly` directory. For example, I used `/home/user_name/lsst/server_config/firefly/`, but it could be anywhere as long as it is under a sub-directory `....../firefly/`.
+- Modify or create (if it does not exist) `setenv.sh`. Append
+
+    ```shell
+    JAVA_OPTS="-Dserver_config_dir=/home/user_name/lsst/server_config/firefly"
+    ```
+ where the argument inside must be the same as configuration directory (the same directory you just put `app.prop` in).
+
 Now you can start the server.
 
 ### Start and Stop
