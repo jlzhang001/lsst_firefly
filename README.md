@@ -64,7 +64,7 @@ Alternatively, the procedures in the Dockerfile can be reproduced on local machi
     python.exe= "/path/to/python /home/user_name/lsst/backend/dispatcher.py"
     ```
     - Note: make sure path to `python` and `dispatch.py` is correct.
-    - Look at [this from Firefly][14] if you want to change how firefly handles FITS files.
+    - Look at [documentation from Firefly][14] if you want to change how firefly handles FITS files.
     
 - Then copy this modified `app.prop` into another `firefly` directory. For example, I used `/home/user_name/lsst/server_config/firefly/`, but it could be anywhere as long as it is under a sub-directory `....../firefly/`.
 - Modify or create (if it does not exist) `setenv.sh`. Append
