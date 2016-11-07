@@ -8,6 +8,17 @@ CMD ["/sbin/my_init"]
 # Fix sh
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
+
+# ########## Install Gradle & Nodejs ##########
+# RUN add-apt-repository -y ppa:cwchien/gradle
+# RUN apt-get update && \
+# apt-get install -y gradle-2.14.1
+#
+# RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+# RUN apt-get install -y nodejs
+# RUN npm install --save npm-latest-version
+
+
 ########## Install JDK 8 ##########
 RUN \
 add-apt-repository -y ppa:webupd8team/java && \
@@ -18,18 +29,6 @@ rm -rf /var/lib/apt/lists/* && \
 rm -rf /var/cache/oracle-jdk8-installer
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME /usr/lib/jvm/java-8-oracle/jre
-
-
-# ########## Install Gradle ##########
-# RUN add-apt-repository -y ppa:cwchien/gradle
-# RUN apt-get update && \
-# apt-get install -y gradle-2.14.1
-#
-#
-# ########## Install Nodejs ##########
-# RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
-# RUN apt-get install -y nodejs
-# RUN npm install --save npm-latest-version
 
 
 ########## Install miniconda ##########
@@ -53,8 +52,8 @@ ENV CATALINA_HOME /opt/tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
 WORKDIR /opt
 
-ENV TOMCAT_MAJOR 9
-ENV TOMCAT_VERSION 9.0.0.M9
+ENV TOMCAT_MAJOR 7
+ENV TOMCAT_VERSION 7.0.72
 ENV TOMCAT_TGZ_URL https://www.apache.org/dist/tomcat/tomcat-$TOMCAT_MAJOR/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz
 ENV TOMCAT_TEMP /tmp/tomcat.tar.gz
 # Wget Tomcat
@@ -69,12 +68,11 @@ RUN mv apache-tomcat-${TOMCAT_VERSION} $CATALINA_HOME && \
 
 # ENV FIREFLY_GIT https://github.com/Caltech-IPAC/firefly.git
 # RUN git clone "$FIREFLY_GIT" /tmp/firefly
-# RUN cd /tmp/firefly && git checkout rc && \
-# gradle :firefly:jar && gradle :fftools:war
-
+# RUN cd /tmp/firefly && git checkout master && \
+# gradle :firefly:warAll
 
 ########## Copy firefly webapp to tomcat server ##########
-COPY ./s_build_Essential/fftools.war ${CATALINA_HOME}/webapps/
+COPY ./s_build_Essential/firefly.war ${CATALINA_HOME}/webapps/
 
 
 ########## Expose port to host ##########
@@ -84,6 +82,11 @@ VOLUME "/opt/tomcat/webapps"
 WORKDIR /opt/tomcat/bin
 
 ########## Initialize script on startup ##########
+RUN mkdir -p /lsst/server_config/firefly
+ADD ./s_build_Essential/app.prop /lsst/server_config/firefly/app.prop
+ADD ./s_build_Essential/setenv.sh /opt/tomcat/bin
+RUN chmod u+x setenv.sh
+
 RUN mkdir -p /etc/my_init.d && mkdir /www
 ADD ./s_build_Essential/run.sh /etc/my_init.d/run1.sh
 ADD ./s_build_Essential/server.xml /opt/tomcat/conf/server.xml
