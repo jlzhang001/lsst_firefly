@@ -59,7 +59,7 @@ Alternatively, the procedures in the Dockerfile can be reproduced on local machi
     
 6. In order to communicate between front end and back end (python scripts), Firefly needs to know python path and scripts. This is defined in the `app.prop` file. You can provide tomcat with a user defined `app.prop` for Firefly during runtime. 
 
-- Edit this [example file](s_build_Essential/app.prop) or `$CATALINA_HOME/webapps/fftools/WEB-INF/config/app.prop`(if it exisits):
+- Edit this [example file](s_build_Essential/app.prop) or `$CATALINA_HOME/webapps/firefly/WEB-INF/config/app.prop`(if it exisits):
     ```
     python.exe= "/path/to/python /home/user_name/lsst/backend/dispatcher.py"
     ```
