@@ -98,3 +98,6 @@ WORKDIR /software/tomcat/webapps
 
 ########## Attach code as volume ##########
 VOLUME ["/www/static", "/www/algorithm"]
+
+########## Start server ##########
+CMD ["/software/tomcat/bin/catalina.sh", "run"]

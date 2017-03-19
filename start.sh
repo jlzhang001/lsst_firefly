@@ -18,7 +18,7 @@ if docker info; then
         --net="host" \
         -v $DIR/frontend:/www/static \
         -v $DIR/backend:/www/algorithm \
-        $IMAGE /software/tomcat/bin/catalina.sh run&
+        $IMAGE &
     PORT=ifconfig | egrep "^[a-z]|inet " | sed -e "s/ [ ]*Link.*/@/" -e "s/.*inet addr://" -e "s/ .*/#/" | tr -d '\012' | tr '@' ' ' | tr '#' '\012' | grep -e eth1 | awk '{ print $2 }'
     echo visit the web with the following address localhost"$PORT":$1/static/index.html
 
