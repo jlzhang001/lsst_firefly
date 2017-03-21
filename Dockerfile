@@ -16,8 +16,9 @@ RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=acc
     for i in *.tar.gz; do tar -xzvf $i -C jdk_current --strip-components 1; done && \
     rm *.tar.gz
 ENV JAVA_HOME /software/jdk_current
-ENV JRE_HOME $JAVA_HOME/jre
-ENV PATH $JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+# ENV JRE_HOME $JAVA_HOME/jre
+# ENV PATH $JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+ENV PATH $JAVA_HOME/bin:$PATH
 
 ########## Install Gradle & Nodejs ##########
 ENV GRADLE_URL https://services.gradle.org/distributions/gradle-3.4.1-bin.zip
