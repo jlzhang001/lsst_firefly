@@ -54,14 +54,14 @@ Alternatively, the procedures in the Dockerfile can be reproduced on local machi
     ```
     For instance, if you check out the front end code into `/home/user_name/lsst/frontend`, then the line would be:
     ```xml
-    <Context docBase="/home/user_name/lsst/frontend" path="/static" />
+    <Context docBase="/home/user_name/lsst/frontend/src" path="/static" />
     ```
     
 6. In order to communicate between front end and back end (python scripts), Firefly needs to know python path and scripts. This is defined in the `app.prop` file. You can provide tomcat with a user defined `app.prop` for Firefly during runtime. 
 
 - Edit the last line of this [example file](s_build_Essential/app.prop) or `$CATALINA_HOME/webapps/firefly/WEB-INF/config/app.prop`(if it exisits):
     ```
-    python.exe= "/path/to/python /home/user_name/lsst/backend/dispatcher.py"
+    python.exe= "/path/to/python /home/user_name/lsst/backend/src/dispatcher.py"
     ```
     - Note: make sure your path to `python` and `dispatch.py` is correct.
     - Look at [documentation from Firefly][14] if you want to change how firefly handles FITS files.
